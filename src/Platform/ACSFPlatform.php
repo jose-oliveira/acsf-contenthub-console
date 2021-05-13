@@ -47,11 +47,6 @@ class ACSFPlatform extends PlatformBase implements PlatformSitesInterface, Platf
 
   public const SITEFACTORY_TOKEN = 'acquia.acsf.token';
 
-  public const GROUP_CONFIG_LOCATION = [
-    '.commonconsole',
-    'groups',
-  ];
-
   /**
    * The Acquia Cloud Client Factory object.
    *
@@ -227,17 +222,15 @@ class ACSFPlatform extends PlatformBase implements PlatformSitesInterface, Platf
       if (empty($sites)) {
         return 3;
       }
-      $sites = array_column($sites, 'uri');
     }
-    elseif ($uri) {
+    $sites = array_column($sites, 'uri');
+
+    if (!$group_name && $uri) {
       if (!$this->isValidUri($uri)) {
         $output->writeln("<error>The provided uri '$uri' was invalid. There's no such acsf site.</error>");
         return 4;
       }
-      $sites = [ $uri ];
-    }
-    else {
-      $sites = array_column($sites, 'uri');
+      $sites = [$uri];
     }
 
     $vendor_path = $this->get('acquia.cloud.environment.vendor_paths');
